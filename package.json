@@ -66,6 +66,7 @@
     "@nx/vite": "16.5.5",
     "@perfsee/sdk": "^1.8.3",
     "@playwright/test": "^1.36.2",
+    "@rspack/cli": "nightly",
     "@taplo/cli": "^0.5.2",
     "@testing-library/react": "^14.0.0",
     "@toeverything/infra": "workspace:*",

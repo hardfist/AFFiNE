@@ -93,15 +93,18 @@ flags.channel = buildFlags.channel as any;
 flags.coverage = buildFlags.coverage;
 
 watchI18N();
+console.log('cwd:', cwd);
 spawn(
   'node',
   [
     '--loader',
     'ts-node/esm/transpile-only',
-    '../../node_modules/webpack/bin/webpack.js',
+    '../../node_modules/@rspack/cli/bin/rspack',
     flags.mode === 'development' ? 'serve' : undefined,
     '--mode',
     flags.mode === 'development' ? 'development' : 'production',
+    '--config',
+    '/Users/yangjian/project/AFFiNE/apps/core/.webpack/webpack.config.ts',
     '--env',
     'flags=' + Buffer.from(JSON.stringify(flags), 'utf-8').toString('hex'),
   ].filter((v): v is string => !!v),

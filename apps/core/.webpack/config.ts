@@ -144,45 +144,6 @@ export const createConfiguration: (
         {
           oneOf: [
             {
-              test: /\.tsx?$/,
-              // Compile all ts files in the workspace
-              include: resolve(rootPath, '..', '..'),
-              loader: require.resolve('swc-loader'),
-              options: {
-                // https://swc.rs/docs/configuring-swc/
-                jsc: {
-                  preserveAllComments: true,
-                  parser: {
-                    syntax: 'typescript',
-                    dynamicImport: true,
-                    topLevelAwait: false,
-                    tsx: true,
-                  },
-                  target: 'es2022',
-                  externalHelpers: true,
-                  transform: {
-                    react: {
-                      runtime: 'automatic',
-                      refresh: buildFlags.mode === 'development' && {
-                        refreshReg: '$RefreshReg$',
-                        refreshSig: '$RefreshSig$',
-                        emitFullSignatures: true,
-                      },
-                    },
-                  },
-                  experimental: {
-                    keepImportAssertions: true,
-                    plugins: [
-                      buildFlags.coverage && [
-                        'swc-plugin-coverage-instrument',
-                        {},
-                      ],
-                    ].filter(Boolean),
-                  },
-                },
-              },
-            },
-            {
               test: /\.svg$/,
               use: [
                 'thread-loader',
@@ -243,30 +204,21 @@ export const createConfiguration: (
     },
 
     plugins: [
-      ...(IN_CI ? [] : [new webpack.ProgressPlugin({ percentBy: 'entries' })]),
-      ...(buildFlags.mode === 'development'
-        ? [new ReactRefreshWebpackPlugin({ overlay: false, esModule: true })]
-        : [
-            new MiniCssExtractPlugin({
-              filename: `[name].[contenthash:8].css`,
-              ignoreOrder: true,
-            }),
-          ]),
-      new HTMLPlugin({
-        template: join(rootPath, '.webpack', 'template.html'),
-        inject: 'body',
-        scriptLoading: 'defer',
-        minify: false,
-        chunks: ['index', 'plugin'],
-        filename: 'index.html',
-      }),
-      new VanillaExtractPlugin(),
-      new webpack.DefinePlugin({
-        'process.env': JSON.stringify({}),
-        'process.env.COVERAGE': JSON.stringify(!!buildFlags.coverage),
-        'process.env.NODE_ENV': JSON.stringify(buildFlags.mode),
-        runtimeConfig: JSON.stringify(runtimeConfig),
-      }),
+      // new HTMLPlugin({
+      //   template: join(rootPath, '.webpack', 'template.html'),
+      //   inject: 'body',
+      //   scriptLoading: 'defer',
+      //   minify: false,
+      //   chunks: ['index', 'plugin'],
+      //   filename: 'index.html',
+      // }),
+      // new VanillaExtractPlugin(),
+      // new webpack.DefinePlugin({
+      //   'process.env': JSON.stringify({}),
+      //   'process.env.COVERAGE': JSON.stringify(!!buildFlags.coverage),
+      //   'process.env.NODE_ENV': JSON.stringify(buildFlags.mode),
+      //   runtimeConfig: JSON.stringify(runtimeConfig),
+      // }),
       new CopyPlugin({
         patterns: [
           { from: resolve(rootPath, 'public'), to: resolve(rootPath, 'dist') },
@@ -303,28 +255,28 @@ export const createConfiguration: (
       ...config.optimization,
       minimize: false,
       runtimeChunk: false,
-      splitChunks: {
-        maxInitialRequests: Infinity,
-        chunks: 'all',
-        cacheGroups: {
-          defaultVendors: {
-            test: `[\\/]node_modules[\\/](?!.*vanilla-extract)`,
-            priority: -10,
-            reuseExistingChunk: true,
-          },
-          default: {
-            minChunks: 2,
-            priority: -20,
-            reuseExistingChunk: true,
-          },
-          styles: {
-            name: 'styles',
-            type: 'css/mini-extract',
-            chunks: 'all',
-            enforce: true,
-          },
-        },
-      },
+      // splitChunks: {
+      //   maxInitialRequests: Infinity,
+      //   chunks: 'all',
+      //   cacheGroups: {
+      //     defaultVendors: {
+      //       test: `[\\/]node_modules[\\/](?!.*vanilla-extract)`,
+      //       priority: -10,
+      //       reuseExistingChunk: true,
+      //     },
+      //     default: {
+      //       minChunks: 2,
+      //       priority: -20,
+      //       reuseExistingChunk: true,
+      //     },
+      //     // styles: {
+      //     //   name: 'styles',
+      //     //   type: 'css/mini-extract',
+      //     //   chunks: 'all',
+      //     //   enforce: true,
+      //     // },
+      //   },
+      // },
     };
   }
 

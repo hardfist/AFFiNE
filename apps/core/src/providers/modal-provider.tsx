@@ -38,12 +38,13 @@ const CreateWorkspaceModal = lazy(() =>
   }))
 );
 
-const TmpDisableAffineCloudModal = lazy(() =>
-  import('../components/affine/tmp-disable-affine-cloud-modal').then(
-    module => ({
-      default: module.TmpDisableAffineCloudModal,
-    })
-  )
+const TmpDisableAffineCloudModal = lazy(
+  () => null
+  // import('../components/affine/tmp-disable-affine-cloud-modal').then(
+  //   module => ({
+  //     default: module.TmpDisableAffineCloudModal,
+  //   })
+  // )
 );
 
 const OnboardingModal = lazy(() =>
